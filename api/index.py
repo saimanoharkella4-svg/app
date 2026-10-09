@@ -1,12 +1,20 @@
 import os
 import sys
+import traceback
 
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.dirname(CURRENT_DIR)
-BACKEND_DIR = os.path.join(ROOT_DIR, "backend")
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(THIS_DIR)
+BACKEND_DIR = os.path.join(PARENT_DIR, "backend")
 
-# Insert backend directory first so app package is imported cleanly
-if os.path.exists(BACKEND_DIR) and BACKEND_DIR not in sys.path:
-    sys.path.insert(0, BACKEND_DIR)
+for p in [BACKEND_DIR, PARENT_DIR]:
+    if p and os.path.exists(p) and p not in sys.path:
+        sys.path.insert(0, p)
 
-from app.main import app
+try:
+    from app.main import app
+except Exception:
+    try:
+        from backend.app.main import app
+    except Exception:
+        traceback.print_exc()
+        raise

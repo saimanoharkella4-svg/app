@@ -1,11 +1,20 @@
 import os
 import sys
+import traceback
 
-# Add backend root directory to sys.path (do NOT add api directory to prevent name collisions with app.api)
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-BACKEND_DIR = os.path.dirname(CURRENT_DIR)
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(THIS_DIR)
+GRANDPARENT_DIR = os.path.dirname(PARENT_DIR)
 
-if BACKEND_DIR not in sys.path:
-    sys.path.insert(0, BACKEND_DIR)
+for p in [PARENT_DIR, os.path.join(PARENT_DIR, "backend"), os.path.join(GRANDPARENT_DIR, "backend"), GRANDPARENT_DIR]:
+    if p and os.path.exists(p) and p not in sys.path:
+        sys.path.insert(0, p)
 
-from app.main import app
+try:
+    from app.main import app
+except Exception:
+    try:
+        from backend.app.main import app
+    except Exception:
+        traceback.print_exc()
+        raise
