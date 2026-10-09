@@ -18,3 +18,5 @@ except Exception:
     except Exception:
         traceback.print_exc()
         raise
+
+handler = app
