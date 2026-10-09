@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     USE_IN_MEMORY_REDIS_FALLBACK: bool = True
     
     # CORS
-    BACKEND_CORS_ORIGINS: List[str] = [
+    BACKEND_CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:3000",
         "http://localhost:5173",
         "http://localhost:8080",
@@ -43,6 +43,23 @@ class Settings(BaseSettings):
         "http://127.0.0.1:8080",
         "*"
     ]
+
+    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
+        if isinstance(v, str):
+            if v == "*":
+                return ["*"]
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [i.strip() for i in v.split(",") if i.strip()]
+        elif isinstance(v, list):
+            return v
+        return ["*"]
     
     # GPS Tracking & Battery Configuration
     TRACKING_INTERVAL_SECONDS: int = 180       # 3 minutes default (configurable 2-5 min)
