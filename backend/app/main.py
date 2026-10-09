@@ -48,6 +48,8 @@ app.include_router(ws.router, prefix=settings.API_V1_STR)
 
 
 @app.get("/")
+@app.get("/api")
+@app.get("/api/index.py")
 def root_info():
     return {
         "app": settings.PROJECT_NAME,
@@ -58,6 +60,7 @@ def root_info():
     }
 
 
+@app.get("/health")
 @app.get("/api/health")
 def health_check():
     return {
