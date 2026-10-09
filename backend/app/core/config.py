@@ -25,7 +25,8 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def assemble_db_connection(self) -> "Settings":
         if not self.DATABASE_URL:
-            self.DATABASE_URL = f"postgresql://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+            # Default to tmp SQLite on serverless if DATABASE_URL env is not set
+            self.DATABASE_URL = "sqlite:////tmp/fst.db"
         return self
     
     # Redis / In-Memory PubSub

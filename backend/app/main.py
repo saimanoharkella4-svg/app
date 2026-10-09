@@ -13,8 +13,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger("fst.main")
 
-# Automatically initialize database schema tables
-Base.metadata.create_all(bind=engine)
+# Automatically initialize database schema tables safely
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    logger.warning(f"Database schema auto-creation deferred or skipped: {e}")
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
