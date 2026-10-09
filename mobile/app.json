@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "CogniTrack",
+    "slug": "cognitrack-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#FFFFFF",
+    "android": {
+      "package": "com.cognitrack.mobile"
+    },
+    "ios": {
+      "bundleIdentifier": "com.cognitrack.mobile"
+    },
+    "plugins": [
+      "expo-status-bar"
+    ]
+  }
+}

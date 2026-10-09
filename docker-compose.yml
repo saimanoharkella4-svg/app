@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------------------
+  # Redis for Live State Cache & WebSocket Pub/Sub
+  # ----------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: cognitrack_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+volumes:
+  redisdata:
